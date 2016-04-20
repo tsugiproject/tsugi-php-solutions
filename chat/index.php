@@ -1,7 +1,5 @@
 <?php
-require_once "../../config.php";
-require_once $CFG->dirroot."/pdo.php";
-require_once $CFG->dirroot."/lib/lms_lib.php";
+require_once "../../../config.php";
 
 use \Tsugi\Core\LTIX;
 
@@ -35,7 +33,7 @@ if ( isset($_POST['chat']) && strlen($_POST['chat']) > 0 ) {
 <?php echo(htmlent_utf8($CONTEXT->title)); ?>
 </title>
 <script type="text/javascript" 
-src="<?php echo($CFG->staticroot); ?>/static/js/jquery-1.10.2.min.js"></script>
+src="<?php echo($CFG->staticroot); ?>/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript">
 
 function htmlentities(str) {

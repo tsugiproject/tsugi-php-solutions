@@ -1,7 +1,5 @@
 <?php
-require_once "../../config.php";
-require_once $CFG->dirroot."/pdo.php";
-require_once $CFG->dirroot."/lib/lms_lib.php";
+require_once "../../../config.php";
 
 use \Tsugi\Core\LTIX;
 
@@ -98,7 +96,7 @@ function initialize_map() {
     var row = other_points[i];
     // if ( i < 3 ) { alert(row); }
     var newLatlng = new google.maps.LatLng(row[0], row[1]);
-    var iconpath = '<?php echo($CFG->staticroot); ?>/static/img/icons/';
+    var iconpath = '<?php echo($CFG->staticroot); ?>/img/icons/';
     var icon = 'green.png';
     var marker = new google.maps.Marker({
       position: newLatlng,

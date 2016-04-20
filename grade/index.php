@@ -1,18 +1,17 @@
 <?php
-require_once "../../config.php";
-require_once $CFG->dirroot."/pdo.php";
-require_once $CFG->dirroot."/lib/lms_lib.php";
-require_once $CFG->dirroot."/core/gradebook/lib.php";
+require_once "../../../config.php";
+
+use \Tsugi\Core\LTIX;
 
 // Retrieve the launch data if present
-$LTI = ltiRequireData(array('user_id', 'result_id', 'role','context_id'));
+$LAUNCH = LTIX::requireData();
 $p = $CFG->dbprefix;
 $displayname = $USER->displayname;
 
 if ( isset($_POST['reset']) ) {
     $sql = "UPDATE {$p}lti_result SET grade = 0.0 WHERE result_id = :RI";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute(array(':RI' => $LTI['result_id']));
+    $stmt->execute(array(':RI' => $LAUNCH->result->id));
     $_SESSION['success'] = "Grade reset";
     header( 'Location: '.sessionize('index.php') ) ;
     return;
@@ -27,9 +26,9 @@ if ( isset($_POST['grade']) )  {
     }
 
     // TODO: Use a SQL SELECT to retrieve the actual grade from tsugi_lti_result
-    // The key for the grade row is in the $LTI['result_id'];
+    // The key for the grade row is in the $LAUNCH->result->id;
     $stmt = $pdo->prepare("SELECT grade FROM {$p}lti_result WHERE result_id = :ID");
-    $stmt->execute(array(":ID" => $LTI['result_id']));
+    $stmt->execute(array(":ID" => $LAUNCH->result->id));
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $oldgrade = 0.0;
     if ( $row !== false ) $oldgrade = $row['grade'];
@@ -91,10 +90,11 @@ Enter grade:
 </form>
 <?php
 
-echo('<p>$LTI["result_id"] is: '.$LTI['result_id']."</p>\n");
+echo('<p>$LAUNCH->result->id is: '.$LAUNCH->result->id."</p>\n");
 
-$dump = safe_var_dump($_SESSION);
-echo("\n<pre>\nSession Dump:\n".$dump."\n</pre>\n");
+echo("\n<pre>\n");
+$LAUNCH->var_dump();
+echo("\n</pre>\n");
 
 $OUTPUT->footer();
 

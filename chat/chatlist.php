@@ -1,16 +1,15 @@
 <?php
-require_once "../../config.php";
-require_once $CFG->dirroot."/pdo.php";
-require_once $CFG->dirroot."/lib/lms_lib.php";
+require_once "../../../config.php";
 
 use \Tsugi\Core\LTIX;
+use \Tsugi\UI\Output;
 
 // Retrieve the launch data if present
 $LTI = LTIX::requireData(array('user_id', 'result_id', 'role','context_id'));
 $p = $CFG->dbprefix;
 $displayname = $USER->displayname;
 
-headerJson();
+Output::headerJson();
 
 // Cleanup old chats
 $stmt = $PDOX->prepare("DELETE FROM {$p}sample_chat 

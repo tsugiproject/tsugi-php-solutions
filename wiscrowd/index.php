@@ -1,12 +1,10 @@
 <?php
-require_once "../../config.php";
-require_once $CFG->dirroot."/pdo.php";
-require_once $CFG->dirroot."/lib/lms_lib.php";
+require_once "../../../config.php";
 
 use \Tsugi\Core\LTIX;
 
 // Sanity checks
-$LTI = LTIX::requireData(array('user_id', 'result_id', 'role','context_id'));
+$LTI = LTIX::requireData();
 $p = $CFG->dbprefix;
 
 if ( isset($_POST['check']) ) {
@@ -14,7 +12,7 @@ if ( isset($_POST['check']) ) {
     return;
 } else if ( $USER->instructor && isset($_POST['reset']) ) {
     $sql = "DELETE FROM {$p}solution_wiscrowd WHERE link_id = :LI";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $PDOX->prepare($sql);
     $stmt->execute(array(':LI' => $LINK->id));
     $_SESSION['success'] = 'Guesses cleared';
     header( 'Location: '.sessionize('index.php') ) ;
@@ -30,7 +28,7 @@ if ( isset($_POST['check']) ) {
             (link_id, user_id, guess) VALUES 
             ( :LI, :UI, :GU ) 
             ON DUPLICATE KEY UPDATE guess = :GU";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $PDOX->prepare($sql);
     $stmt->execute(array(
         ':LI' => $LINK->id,
         ':UI' => $USER->id,
@@ -84,7 +82,7 @@ echo("\n<div id=\"guesses\">\n");
 
 //Retrieve the guesses
 if ( $USER->instructor ) {
-    $stmt = $pdo->prepare("SELECT guess,displayname FROM {$p}solution_wiscrowd
+    $stmt = $PDOX->prepare("SELECT guess,displayname FROM {$p}solution_wiscrowd
         JOIN {$p}lti_user
         ON {$p}solution_wiscrowd.user_id = {$p}lti_user.user_id
         WHERE link_id = :LI AND guess > 0.0");
