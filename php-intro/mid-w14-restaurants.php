@@ -7,7 +7,7 @@ use Goutte\Client;
 
 line_out("Grading PHP-Intro Restaurants Application");
 
-$url = getUrl('http://www.php-intro.com/exam/mid-w14-restaurants');
+$url = getUrl('http://www.wa4e.com/exam/mid-w14-restaurants');
 $grade = 0;
 
 error_log("Retrieving ".$url);

@@ -7,7 +7,7 @@ use Goutte\Client;
 
 line_out("Grading PHP-Intro Video Application");
 
-$gradeurl = getUrl('http://www.php-intro.com/exam/mid-w14-videos');
+$gradeurl = getUrl('http://www.wa4e.com/exam/mid-w14-videos');
 // $gradeurl = getUrl('http://localhost/~csev/mid-w14-videos');
 //$gradeurl = getUrl('');
 $grade = 0;
@@ -70,7 +70,7 @@ line_out("Looking for the form with a 'Add New' submit button");
 $form = $crawler->selectButton('Add New')->form();
 
 line_out("Causing Add error, putting in bad email address.");
-$form->setValues(array("url" => "http://www.php-intro.com", "email" => "PO Box 123", "length" => "12", "rating" => "6"));
+$form->setValues(array("url" => "http://www.wa4e.com", "email" => "PO Box 123", "length" => "12", "rating" => "6"));
 $crawler = $client->submit($form);
 $passed++;
 
@@ -87,8 +87,8 @@ if ( strpos(strtolower($html), 'error in') !== false ) {
 
 line_out("Looking for the form with a 'Add New' submit button");
 $form = $crawler->selectButton('Add New')->form();
-$url = 'http://www.php-intro.com/x.php?data='.sprintf("%03d",rand(1,100));
-$email = "sarah@php-intro.com";
+$url = 'http://www.wa4e.com/x.php?data='.sprintf("%03d",rand(1,100));
+$email = "sarah@wa4e.com";
 $length = rand(1,100);
 $rating = rand(1,100);
 line_out("Entering url=$url, email=$email, length=$length");
@@ -212,8 +212,8 @@ $passed++;
 
 line_out("Looking for the form with a 'Add New' submit button");
 $form = $crawler->selectButton('Add New')->form();
-$url = 'http://www.php-intro.com/x.php?>data='.sprintf("%03d",rand(1,100));
-$email = "Sarah_is_so_>@php-intro.com";
+$url = 'http://www.wa4e.com/x.php?>data='.sprintf("%03d",rand(1,100));
+$email = "Sarah_is_so_>@wa4e.com";
 $length = rand(1,100);
 line_out("Entering url=$url, email=$email, length=$length");
 $form->setValues(array("url" => $url, "email" => $email, "length" => $length, "rating" => "12345"));

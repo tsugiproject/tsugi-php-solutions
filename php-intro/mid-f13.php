@@ -7,7 +7,7 @@ use Goutte\Client;
 
 line_out("Grading PHP-Intro Contacts Application");
 
-$url = getUrl('http://www.php-intro.com/exam/mid-f13-contacts');
+$url = getUrl('http://www.wa4e.com/exam/mid-f13-contacts');
 //$url = getUrl('');
 $grade = 0;
 

@@ -6,7 +6,7 @@ use Goutte\Client;
 
 line_out("Grading PHP-Intro Autos Application");
 
-$url = getUrl('http://www.php-intro.com/exam/mid-f14-autos');
+$url = getUrl('http://www.wa4e.com/exam/mid-f14-autos');
 if ( $url === false ) return;
 $grade = 0;
 
