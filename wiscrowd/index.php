@@ -8,19 +8,19 @@ $LTI = LTIX::requireData();
 $p = $CFG->dbprefix;
 
 if ( isset($_POST['check']) ) {
-    header( 'Location: '.sessionize('index.php') ) ;
+    header( 'Location: '.addSession('index.php') ) ;
     return;
 } else if ( $USER->instructor && isset($_POST['reset']) ) {
     $sql = "DELETE FROM {$p}solution_wiscrowd WHERE link_id = :LI";
     $stmt = $PDOX->prepare($sql);
     $stmt->execute(array(':LI' => $LINK->id));
     $_SESSION['success'] = 'Guesses cleared';
-    header( 'Location: '.sessionize('index.php') ) ;
+    header( 'Location: '.addSession('index.php') ) ;
     return;
 } else if ( isset($_POST['guess']) ) {
     if ( ! is_numeric($_POST['guess']) ) {
         $_SESSION['error'] = 'Non-numeric guess is not allowed';
-        header( 'Location: '.sessionize('index.php') ) ;
+        header( 'Location: '.addSession('index.php') ) ;
         return;
     }
 
@@ -34,13 +34,14 @@ if ( isset($_POST['check']) ) {
         ':UI' => $USER->id,
         ':GU' => $_POST['guess']));
     $_SESSION['success'] = 'Guess recorded';
-    header( 'Location: '.sessionize('index.php') ) ;
+    header( 'Location: '.addSession('index.php') ) ;
     return;
 }
 
 // View 
 $OUTPUT->header();
 $OUTPUT->bodyStart();
+$OUTPUT->topNav();
 
 if ( isset($_SESSION['error']) ) {
     echo '<p style="color:red">'.$_SESSION['error']."</p>\n";
