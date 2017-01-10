@@ -52,11 +52,30 @@ while ( $row = $stmt->fetch(PDO::FETCH_ASSOC) ) {
     $points[] = array($row['lat']+0.0,$row['lng']+0.0,$row['displayname']);
 }
 
+$OUTPUT->header();
+$OUTPUT->bodyStart();
+$OUTPUT->topNav();
+$OUTPUT->flashMessages();
+
+if ( !isset($CFG->google_map_api_key) ) {
+    echo('<p>There is no MAP api key ($CFG->google_map_api_key)</p>'."\n");
+    $OUTPUT->footer();
+    return;
+}
+
 ?>
-<html><head><title>Map for 
-<?php echo($CONTEXT->title); ?>
-</title>
-<script src="//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<div id="map_canvas" style="margin: 10px; width:500px; max-width: 100%; height:500px"></div>
+<form method="post">
+ Latitude: <input size="30" type="text" id="latbox" name="lat" 
+  <?php echo(' value="'.htmlent_utf8($lat).'" '); ?> >
+ Longitude: <input size="30" type="text" id="lngbox" name="lng"
+  <?php echo(' value="'.htmlent_utf8($lng).'" '); ?> >
+ <button type="submit">Save Location</button>
+</form>
+<?php
+$OUTPUT->footerStart();
+?>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=<?= $CFG->google_map_api_key ?>"></script>
 <script type="text/javascript">
 var map;
 
@@ -110,29 +129,13 @@ function initialize_map() {
 
 // Load the other points 
 other_points = 
-<?php echo( json_encode($points));?> 
+<?= json_encode($points) ?> 
 ;
-</script>
-</head>
-<body style="font-family: sans-serif;" onload="initialize_map();">
-<?php
-if ( isset($_SESSION['error']) ) {
-    echo '<p style="color:red">'.$_SESSION['error']."</p>\n";
-    unset($_SESSION['error']);
-}
-if ( isset($_SESSION['success']) ) {
-    echo '<p style="color:green">'.$_SESSION['success']."</p>\n";
-    unset($_SESSION['success']);
-}
 
-?>
-<div id="map_canvas" style="margin: 10px; width:500px; max-width: 100%; height:500px"></div>
-<form method="post">
- Latitude: <input size="30" type="text" id="latbox" name="lat" 
-  <?php echo(' value="'.htmlent_utf8($lat).'" '); ?> >
- Longitude: <input size="30" type="text" id="lngbox" name="lng"
-  <?php echo(' value="'.htmlent_utf8($lng).'" '); ?> >
- <button type="submit">Save Location</button>
-</form>
+// Ask jQuery to run our function once the document has loaded
+$(document).ready(function() {
+    initialize_map();
+});
+</script>
 <?php
-$OUTPUT->footer();
+$OUTPUT->footerEnd();
