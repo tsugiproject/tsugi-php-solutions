@@ -10,7 +10,7 @@ $displayname = $USER->displayname;
 
 if ( isset($_POST['reset']) ) {
     $sql = "UPDATE {$p}lti_result SET grade = 0.0 WHERE result_id = :RI";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $PDOX->prepare($sql);
     $stmt->execute(array(':RI' => $LAUNCH->result->id));
     $_SESSION['success'] = "Grade reset";
     header( 'Location: '.addSession('index.php') ) ;
@@ -27,7 +27,7 @@ if ( isset($_POST['grade']) )  {
 
     // TODO: Use a SQL SELECT to retrieve the actual grade from tsugi_lti_result
     // The key for the grade row is in the $LAUNCH->result->id;
-    $stmt = $pdo->prepare("SELECT grade FROM {$p}lti_result WHERE result_id = :ID");
+    $stmt = $PDOX->prepare("SELECT grade FROM {$p}lti_result WHERE result_id = :ID");
     $stmt->execute(array(":ID" => $LAUNCH->result->id));
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $oldgrade = 0.0;
@@ -37,12 +37,12 @@ if ( isset($_POST['grade']) )  {
         $_SESSION['error'] = "Grade lower than $oldgrade - not sent";
     } else {
         // Call the XML APIs to send the grade back to the LMS.
-        $retval = gradeSend($gradetosend, false);
+        $retval = $RESULT->gradeSend($gradetosend, false);
         if ( $retval === true ) {
 
             $sql = "UPDATE {$p}lti_result SET 
                 grade = :GR WHERE result_id = :ID";
-            $stmt = $pdo->prepare($sql);
+            $stmt = $PDOX->prepare($sql);
             $stmt->execute(array(
                 ':GR' => $gradetosend,
                 ':ID' => $_SESSION['lti']['result_id']));
